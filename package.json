@@ -1,0 +1,17 @@
+{
+  "name": "react-moment-proptypes",
+  "version": "0.0.1",
+  "description": "React proptype for moment module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": {
+    "name": "Caleb Morris",
+    "email": "caleb.morris.g@gmail.com"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "moment": ">=1.5.0"
+  }
+}
