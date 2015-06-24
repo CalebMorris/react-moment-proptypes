@@ -9,7 +9,7 @@ var momentPropTypes = require('react-moment-proptypes');
 
 var TestClass = React.createClass({
   propTypes : {
-    dateThing : momentPropTypes.moment,
+    dateThing : momentPropTypes.momentObj,
     stringThing : momentPropTypes.momentString,
   },
 
