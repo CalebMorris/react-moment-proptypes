@@ -1,6 +1,6 @@
 # react-moment-proptypes
 
-A React Proptype Validator to check if passed prop is a momemnt.js construct
+A React Proptype Validator to check if passed prop is a moment.js construct
 
 # Example
 
