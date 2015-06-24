@@ -1,6 +1,6 @@
 var moment = require('moment');
 
-function moment(props, propName, componentName, location) {
+function momentObj(props, propName, componentName, location) {
   var propValue = props[propName];
   if (! moment.isMoment(propValue)) {
     var propType = typeof propValue;
@@ -25,7 +25,7 @@ function momentString(props, propName, componentName, location) {
 };
 
 module.exports = {
-  moment : moment,
+  momentObj : momentObj,
   momentString : momentString,
 };
 
