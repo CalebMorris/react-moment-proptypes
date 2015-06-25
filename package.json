@@ -2,6 +2,7 @@
   "name": "react-moment-proptypes",
   "version": "0.0.5",
   "description": "React proptype for moment module",
+  "keywords": ["moment", "react", "props", "proptypes"],
   "main": "index.js",
   "repository": {
     "type": "git",
