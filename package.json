@@ -23,10 +23,10 @@
     "moment": ">=1.5.0"
   },
   "devDependencies": {
+    "babel": "^5.6.23",
     "chai": "^2.3.0",
     "eslint": "^0.24.0",
     "istanbul": "^0.3.13",
-    "jsdom": "^5.6.1",
     "mocha": "^2.2.1",
     "react": "^0.13.3"
   }
