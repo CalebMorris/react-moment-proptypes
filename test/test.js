@@ -3,8 +3,9 @@ import { expect } from 'chai';
 import React from 'react/addons';
 
 const TestUtils = React.addons.TestUtils;
-
 const warningRegex = /^Warning/;
+
+import MomentPropTypes from '../index';
 
 describe('ProptypeTests', () => {
 
@@ -43,7 +44,7 @@ describe('ProptypeTests', () => {
 
   });
 
-  describe('Example', () => {
+  describe('Missing required', () => {
 
     let TestClass;
 
@@ -51,7 +52,7 @@ describe('ProptypeTests', () => {
 
       TestClass = React.createClass({
         propTypes : {
-          test : React.PropTypes.string.isRequired,
+          test : MomentPropTypes.momentObj.isRequired,
         },
         render() {
           return null;
@@ -73,5 +74,94 @@ describe('ProptypeTests', () => {
 
   });
 
+  describe('Missing optional', () => {
+
+    let TestClass;
+
+    before(() => {
+
+      TestClass = React.createClass({
+        propTypes : {
+          test : MomentPropTypes.momentObj,
+        },
+        render() {
+          return null;
+        },
+      });
+
+    });
+
+    it('should have a warning for the missing prop', () => {
+
+      shallowRenderer.render(
+        React.createElement(TestClass, null, null)
+      );
+
+      expect(warnings).to.be.an('array');
+      expect(warnings.length).to.equal(0);
+
+    });
+
+  });
+
+  describe('Missing required', () => {
+
+    let TestClass;
+
+    before(() => {
+
+      TestClass = React.createClass({
+        propTypes : {
+          test : MomentPropTypes.momentString.isRequired,
+        },
+        render() {
+          return null;
+        },
+      });
+
+    });
+
+    it('should have a warning for the missing prop', () => {
+
+      shallowRenderer.render(
+        React.createElement(TestClass, null, null)
+      );
+
+      expect(warnings).to.be.an('array');
+      expect(warnings.length).to.equal(1);
+
+    });
+
+  });
+
+  describe('Missing optional', () => {
+
+    let TestClass;
+
+    before(() => {
+
+      TestClass = React.createClass({
+        propTypes : {
+          test : MomentPropTypes.momentString,
+        },
+        render() {
+          return null;
+        },
+      });
+
+    });
+
+    it('should have a warning for the missing prop', () => {
+
+      shallowRenderer.render(
+        React.createElement(TestClass, null, null)
+      );
+
+      expect(warnings).to.be.an('array');
+      expect(warnings.length).to.equal(0);
+
+    });
+
+  });
 
 });
