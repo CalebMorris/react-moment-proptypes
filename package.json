@@ -4,8 +4,8 @@
   "description": "React proptype for moment module",
   "main": "index.js",
   "repository": {
-    "type" : "git",
-    "url" : "git@github.com:CalebMorris/react-moment-proptypes.git"
+    "type": "git",
+    "url": "git@github.com:CalebMorris/react-moment-proptypes.git"
   },
   "scripts": {
     "clean": "rm -Rf ./coverage",
