@@ -88,7 +88,7 @@
     "no-new-wrappers": [ 2 ],
     "no-octal": [ 2 ],
     "no-octal-escape": [ 2 ],
-    "no-param-reassign": [ 2 ],
+    "no-param-reassign": [ 0 ],
     "no-process-env" : [ 0 ],
     "no-proto": [ 2 ],
     "no-redeclare": [ 2 ],
@@ -182,7 +182,7 @@
     // legacy
     "max-depth": [ 2, 2 ],
     "max-len": [ 2, 100 ],
-    "max-params": [ 2, 4 ],
+    "max-params": [ 0, 4 ],
     "max-statements": [ 2, 15 ],
     "no-bitwise": [ 2 ],
   }

@@ -12,6 +12,7 @@ describe('ProptypeTests', () => {
   let shallowRenderer;
   let oldConsole;
   let warnings = [];
+  let TestClass;
 
   before(() => {
 
@@ -35,6 +36,7 @@ describe('ProptypeTests', () => {
   afterEach(() => {
 
     warnings = [];
+    TestClass = null;
 
   });
 
@@ -45,8 +47,6 @@ describe('ProptypeTests', () => {
   });
 
   describe('Missing required', () => {
-
-    let TestClass;
 
     before(() => {
 
@@ -61,7 +61,7 @@ describe('ProptypeTests', () => {
 
     });
 
-    it('should have a warning for the missing prop', () => {
+    it('should have a warning for the missing moment obj', () => {
 
       shallowRenderer.render(
         React.createElement(TestClass, null, null)
@@ -75,8 +75,6 @@ describe('ProptypeTests', () => {
   });
 
   describe('Missing optional', () => {
-
-    let TestClass;
 
     before(() => {
 
@@ -91,7 +89,7 @@ describe('ProptypeTests', () => {
 
     });
 
-    it('should have a warning for the missing prop', () => {
+    it('should have no warnings for optinal moment obj', () => {
 
       shallowRenderer.render(
         React.createElement(TestClass, null, null)
@@ -106,8 +104,6 @@ describe('ProptypeTests', () => {
 
   describe('Missing required', () => {
 
-    let TestClass;
-
     before(() => {
 
       TestClass = React.createClass({
@@ -121,11 +117,13 @@ describe('ProptypeTests', () => {
 
     });
 
-    it('should have a warning for the missing prop', () => {
+    it('should have a warning for the missing moment string', () => {
 
       shallowRenderer.render(
         React.createElement(TestClass, null, null)
       );
+
+      console.log('momentString', Object.keys(MomentPropTypes.momentString), MomentPropTypes.momentString.isRequired);
 
       expect(warnings).to.be.an('array');
       expect(warnings.length).to.equal(1);
@@ -135,8 +133,6 @@ describe('ProptypeTests', () => {
   });
 
   describe('Missing optional', () => {
-
-    let TestClass;
 
     before(() => {
 
@@ -151,7 +147,7 @@ describe('ProptypeTests', () => {
 
     });
 
-    it('should have a warning for the missing prop', () => {
+    it('should have no warnings for the optional moment string', () => {
 
       shallowRenderer.render(
         React.createElement(TestClass, null, null)
