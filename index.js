@@ -1,8 +1,8 @@
 var moment = require('moment');
 
 function momentObj(props, propName, componentName, location) {
-  var propValue = props[propName];
-  if (! moment.isMoment(propValue)) {
+  var propValue = props[ propName ];
+  if (!moment.isMoment(propValue)) {
     var propType = typeof propValue;
     return new Error(
       'Invalid ' + location + '`' + propName + '` of type `' + propType + '` ' +
@@ -10,10 +10,10 @@ function momentObj(props, propName, componentName, location) {
     );
   }
   return null;
-};
+}
 
 function momentString(props, propName, componentName, location) {
-  var propValue = props[propName];
+  var propValue = props[ propName ];
   if (moment.utc(propValue).format() === 'Invalid date') {
     var propType = typeof propValue;
     return new Error(
@@ -22,7 +22,7 @@ function momentString(props, propName, componentName, location) {
     );
   }
   return null;
-};
+}
 
 module.exports = {
   momentObj : momentObj,
