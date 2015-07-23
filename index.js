@@ -54,7 +54,7 @@ module.exports = {
     return !moment.isMoment(value);
   }),
 
-  momentString : createMomentChecker(function(value) {
+  momentString : createMomentChecker(function isMomentString(value) {
     return moment.utc(value).format() === 'Invalid date';
   }),
 

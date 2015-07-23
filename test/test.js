@@ -25,9 +25,12 @@ describe('ProptypeTests', () => {
           warnings.push(arg);
         }
       }
-
-      oldConsole.apply(console, arguments);
     };
+
+
+  });
+
+  beforeEach(() => {
 
     shallowRenderer = TestUtils.createRenderer();
 
@@ -37,6 +40,7 @@ describe('ProptypeTests', () => {
 
     warnings = [];
     TestClass = null;
+    shallowRenderer = null;
 
   });
 
@@ -46,13 +50,13 @@ describe('ProptypeTests', () => {
 
   });
 
-  describe('Missing required', () => {
+  describe('Missing required object', () => {
 
     before(() => {
 
       TestClass = React.createClass({
         propTypes : {
-          test : MomentPropTypes.momentObj.isRequired,
+          testRequiredObject : MomentPropTypes.momentObj.isRequired,
         },
         render() {
           return null;
@@ -61,7 +65,7 @@ describe('ProptypeTests', () => {
 
     });
 
-    it('should have a warning for the missing moment obj', () => {
+    it('should have a warning for the missing moment obj', (done) => {
 
       shallowRenderer.render(
         React.createElement(TestClass, null, null)
@@ -69,18 +73,19 @@ describe('ProptypeTests', () => {
 
       expect(warnings).to.be.an('array');
       expect(warnings.length).to.equal(1);
+      done();
 
     });
 
   });
 
-  describe('Missing optional', () => {
+  describe('Missing optional object', () => {
 
     before(() => {
 
       TestClass = React.createClass({
         propTypes : {
-          test : MomentPropTypes.momentObj,
+          testOptionalObject : MomentPropTypes.momentObj,
         },
         render() {
           return null;
@@ -89,7 +94,7 @@ describe('ProptypeTests', () => {
 
     });
 
-    it('should have no warnings for optinal moment obj', () => {
+    it('should have no warnings for optinal moment obj', (done) => {
 
       shallowRenderer.render(
         React.createElement(TestClass, null, null)
@@ -97,18 +102,19 @@ describe('ProptypeTests', () => {
 
       expect(warnings).to.be.an('array');
       expect(warnings.length).to.equal(0);
+      done();
 
     });
 
   });
 
-  describe('Missing required', () => {
+  describe('Missing required string', () => {
 
     before(() => {
 
       TestClass = React.createClass({
         propTypes : {
-          test : MomentPropTypes.momentString.isRequired,
+          testRequiredString : MomentPropTypes.momentString.isRequired,
         },
         render() {
           return null;
@@ -117,28 +123,27 @@ describe('ProptypeTests', () => {
 
     });
 
-    it('should have a warning for the missing moment string', () => {
+    it('should have a warning for the missing moment string', (done) => {
 
       shallowRenderer.render(
         React.createElement(TestClass, null, null)
       );
-
-      console.log('momentString', Object.keys(MomentPropTypes.momentString), MomentPropTypes.momentString.isRequired);
 
       expect(warnings).to.be.an('array');
       expect(warnings.length).to.equal(1);
+      done();
 
     });
 
   });
 
-  describe('Missing optional', () => {
+  describe('Missing optional string', () => {
 
     before(() => {
 
       TestClass = React.createClass({
         propTypes : {
-          test : MomentPropTypes.momentString,
+          testOptionalString : MomentPropTypes.momentString,
         },
         render() {
           return null;
@@ -147,7 +152,7 @@ describe('ProptypeTests', () => {
 
     });
 
-    it('should have no warnings for the optional moment string', () => {
+    it('should have no warnings for the optional moment string', (done) => {
 
       shallowRenderer.render(
         React.createElement(TestClass, null, null)
@@ -155,6 +160,7 @@ describe('ProptypeTests', () => {
 
       expect(warnings).to.be.an('array');
       expect(warnings.length).to.equal(0);
+      done();
 
     });
 
