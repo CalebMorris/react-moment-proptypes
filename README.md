@@ -1,5 +1,8 @@
 # react-moment-proptypes
 
+[![Build
+Status](https://api.shippable.com/projects/55b07d2aedd7f2c052802265/badge?branchName=master)](https://app.shippable.com/projects/55b07d2aedd7f2c052802265/builds/latest)
+
 A React Proptype Validator to check if passed prop is a moment.js construct
 
 # Example
