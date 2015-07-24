@@ -131,12 +131,12 @@
     "no-sync": [ 2 ],
 
     // style
-    "array-bracket-spacing": [ 2, "always" ],
+    "array-bracket-spacing": [ 0, "always" ],
     "brace-style": [ 2, "1tbs" ],
     "camelcase": [ 2, { "properties" : "never" } ],
     "comma-spacing": [ 2, { "before": false, "after": true } ],
     "comma-style": [ 2, "last" ],
-    "computed-property-spacing": [ 2, "always" ],
+    "computed-property-spacing": [ 0, "always" ],
     "consistent-this": [ 2, "self" ],
     "eol-last": [ 2 ],
     "func-style": [ 2, "declaration" ],
