@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { expect } from 'chai';
 
 import React from 'react/addons';
@@ -73,6 +74,7 @@ describe('ProptypeTests', () => {
 
       expect(warnings).to.be.an('array');
       expect(warnings.length).to.equal(1);
+      expect(warnings[0]).to.contain('Required prop');
       done();
 
     });
@@ -108,6 +110,34 @@ describe('ProptypeTests', () => {
 
   });
 
+  describe('Wrong type optional object', () => {
+
+    before(() => {
+
+      TestClass = React.createClass({
+        propTypes : {
+          testWrongObject : MomentPropTypes.momentObj,
+        },
+        render() {
+          return null;
+        },
+      });
+
+    });
+
+    it('should have no warnings for optinal moment obj', (done) => {
+
+      shallowRenderer.render(<TestClass testWrongObject={1} />);
+
+      expect(warnings).to.be.an('array');
+      expect(warnings.length).to.equal(1);
+      expect(warnings[0]).to.contain('Invalid prop');
+      done();
+
+    });
+
+  });
+
   describe('Missing required string', () => {
 
     before(() => {
@@ -131,6 +161,7 @@ describe('ProptypeTests', () => {
 
       expect(warnings).to.be.an('array');
       expect(warnings.length).to.equal(1);
+      expect(warnings[0]).to.contain('Required prop');
       done();
 
     });
@@ -156,6 +187,65 @@ describe('ProptypeTests', () => {
 
       shallowRenderer.render(
         React.createElement(TestClass, null, null)
+      );
+
+      expect(warnings).to.be.an('array');
+      expect(warnings.length).to.equal(0);
+      done();
+
+    });
+
+  });
+
+
+  describe('Invalid moment string/raw', () => {
+
+    before(() => {
+
+      TestClass = React.createClass({
+        propTypes : {
+          testWrongString : MomentPropTypes.momentString,
+        },
+        render() {
+          return null;
+        },
+      });
+
+    });
+
+    it('should have no warnings for the optional moment string', (done) => {
+
+      shallowRenderer.render(<TestClass testWrongString={false} />);
+
+      expect(warnings).to.be.an('array');
+      expect(warnings.length).to.equal(1);
+      expect(warnings[0]).to.contain('Invalid prop');
+      done();
+
+    });
+
+  });
+
+  describe('Correct Optional Input', () => {
+
+    before(() => {
+
+      TestClass = React.createClass({
+        propTypes : {
+          testValidString : MomentPropTypes.momentString,
+          testValidObject : MomentPropTypes.momentObj,
+        },
+        render() {
+          return null;
+        },
+      });
+
+    });
+
+    it('should have no warnings for the optional moment string', (done) => {
+
+      shallowRenderer.render(
+        <TestClass testValidString={'12-12-2015'} testValidObject={moment()} />
       );
 
       expect(warnings).to.be.an('array');
