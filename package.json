@@ -15,10 +15,11 @@
   },
   "scripts": {
     "clean": "rm -Rf ./coverage",
+    "coveralls": "cat ./coverage/lcov.info | coveralls",
     "test": "./node_modules/.bin/mocha --recursive --compilers js:babel/register",
     "lint": "./node_modules/.bin/eslint --ext .js .",
     "lint-quiet": "./node_modules/.bin/eslint --ext .js --quiet .",
-    "coverage": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha -- --recursive --compilers js:babel/register"
+    "coverage": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha -- --reporter dot --recursive --compilers js:babel/register"
   },
   "author": {
     "name": "Caleb Morris",
@@ -31,6 +32,7 @@
   "devDependencies": {
     "babel": "^5.6.23",
     "chai": "^2.3.0",
+    "coveralls": "^2.11.3",
     "eslint": "^0.24.0",
     "istanbul": "^0.3.13",
     "mocha": "^2.2.1",
