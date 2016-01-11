@@ -222,14 +222,14 @@ describe('ProptypeTests', () => {
 
     });
 
-    it('should have invalid prop for wrong type', (done) => {
+    it('should have invalid prop for invalid moment string', (done) => {
 
-      const testElement = <TestClass testWrongString={false} />;
+      const testElement = <TestClass testWrongString={'test'} />;
       TestUtils.renderIntoDocument(testElement);
 
       expect(warnings).to.be.an('array');
       expect(warnings.length).to.equal(1);
-      expect(warnings[0]).to.contain('Invalid input type');
+      expect(warnings[0]).to.contain('Invalid prop');
       done();
 
     });
