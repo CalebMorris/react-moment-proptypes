@@ -184,8 +184,7 @@ describe('ProptypeTests', () => {
 
     it('should have no warnings for undefined input', (done) => {
 
-      var k = undefined;
-      const testElement = <TestClass testOptionalString={k} />;
+      const testElement = <TestClass testOptionalString={undefined} />;
       TestUtils.renderIntoDocument(testElement);
 
       expect(warnings).to.be.an('array');
