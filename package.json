@@ -36,7 +36,7 @@
     "coveralls": "^2.11.6",
     "eslint": "^0.24.0",
     "istanbul": "^0.3.13",
-    "jsdom": "^7.2.2",
+    "jsdom": "^6.5.1",
     "mocha": "^2.2.1",
     "react": "^0.14.6",
     "react-addons-test-utils": "^0.14.6"
