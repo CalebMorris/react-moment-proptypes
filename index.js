@@ -11,7 +11,7 @@ var ReactPropTypeLocationNames = {
   childContext : 'child context',
 };
 
-function createMomentChecker(validator) {
+function createMomentChecker(type, typeValidator, validator) {
 
   function propValidator(isRequired, props, propName, componentName, location, propFullName) {
 
@@ -27,13 +27,20 @@ function createMomentChecker(validator) {
     }
 
     var propValue = props[ propName ];
+    var propType = typeof propValue;
 
-    if (typeof propValue === 'undefined') {
+    if (typeof propValue === 'undefined' || propValue === null) {
       return null;
     }
 
+    if (typeValidator && !typeValidator(propValue)) {
+      return new Error(
+        'Invalid input type: `' + propName + '` of type `' + propType + '` ' +
+        'supplied to `' + componentName + '`, expected `' + type + '`.'
+      );
+    }
+
     if (validator(propValue)) {
-      var propType = typeof propValue;
       return new Error(
         'Invalid ' + location + ' `' + propName + '` of type `' + propType + '` ' +
         'supplied to `' + componentName + '`, expected `Moment`.'
@@ -53,12 +60,20 @@ function createMomentChecker(validator) {
 
 module.exports = {
 
-  momentObj : createMomentChecker(function(value) {
-    return !moment.isMoment(value);
-  }),
+  momentObj : createMomentChecker(
+    'object',
+    (obj) => typeof obj === 'object',
+    function(value) {
+      return typeof value === 'object' && !moment.isMoment(value);
+    }
+  ),
 
-  momentString : createMomentChecker(function isMomentString(value) {
-    return moment.utc(value).format() === 'Invalid date';
-  }),
+  momentString : createMomentChecker(
+    'string',
+    (str) => typeof str === 'string',
+    function isMomentString(value) {
+      return typeof value === 'string' && moment.utc(value).format() === 'Invalid date';
+    }
+  ),
 
 };
