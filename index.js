@@ -62,7 +62,7 @@ module.exports = {
 
   momentObj : createMomentChecker(
     'object',
-    (obj) => typeof obj === 'object',
+    function (obj) { return typeof obj === 'object' },
     function(value) {
       return typeof value === 'object' && !moment.isMoment(value);
     }
@@ -70,7 +70,7 @@ module.exports = {
 
   momentString : createMomentChecker(
     'string',
-    (str) => typeof str === 'string',
+    function (str) { return typeof str === 'string' },
     function isMomentString(value) {
       return typeof value === 'string' && moment.utc(value).format() === 'Invalid date';
     }
