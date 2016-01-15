@@ -1,25 +1,23 @@
+import React from 'react';
+import TestUtils from 'react-addons-test-utils';
 import moment from 'moment';
 import { expect } from 'chai';
 
-import React from 'react/addons';
-
-const TestUtils = React.addons.TestUtils;
 const warningRegex = /^Warning/;
 
 import MomentPropTypes from '../index';
 
 describe('ProptypeTests', () => {
 
-  let shallowRenderer;
   let oldConsole;
   let warnings = [];
   let TestClass;
 
   before(() => {
 
-    oldConsole = console.warn;
+    oldConsole = console.error;
 
-    console.warn = function() {
+    console.error = function() {
       for (let i = 0; i < arguments.length; i++) {
         const arg = arguments[ i ];
         if (warningRegex.test(arg)) {
@@ -28,26 +26,18 @@ describe('ProptypeTests', () => {
       }
     };
 
-
-  });
-
-  beforeEach(() => {
-
-    shallowRenderer = TestUtils.createRenderer();
-
   });
 
   afterEach(() => {
 
     warnings = [];
     TestClass = null;
-    shallowRenderer = null;
 
   });
 
   after(() => {
 
-    console.warn = oldConsole;
+    console.error = oldConsole;
 
   });
 
@@ -68,9 +58,8 @@ describe('ProptypeTests', () => {
 
     it('should have a warning for the missing moment obj', (done) => {
 
-      shallowRenderer.render(
-        React.createElement(TestClass, null, null)
-      );
+      const testElement = <TestClass/>;
+      TestUtils.renderIntoDocument(testElement);
 
       expect(warnings).to.be.an('array');
       expect(warnings.length).to.equal(1);
@@ -96,11 +85,10 @@ describe('ProptypeTests', () => {
 
     });
 
-    it('should have no warnings for optinal moment obj', (done) => {
+    it('should have no warnings for Missing optinal moment obj', (done) => {
 
-      shallowRenderer.render(
-        React.createElement(TestClass, null, null)
-      );
+      const testElement = <TestClass/>;
+      TestUtils.renderIntoDocument(testElement);
 
       expect(warnings).to.be.an('array');
       expect(warnings.length).to.equal(0);
@@ -125,13 +113,14 @@ describe('ProptypeTests', () => {
 
     });
 
-    it('should have no warnings for optinal moment obj', (done) => {
+    it('should have no warnings for optinal moment obj being wrong type', (done) => {
 
-      shallowRenderer.render(<TestClass testWrongObject={1} />);
+      const testElement = <TestClass testWrongObject={1} />;
+      TestUtils.renderIntoDocument(testElement);
 
       expect(warnings).to.be.an('array');
       expect(warnings.length).to.equal(1);
-      expect(warnings[0]).to.contain('Invalid prop');
+      expect(warnings[0]).to.contain('Invalid input type');
       done();
 
     });
@@ -155,9 +144,8 @@ describe('ProptypeTests', () => {
 
     it('should have a warning for the missing moment string', (done) => {
 
-      shallowRenderer.render(
-        React.createElement(TestClass, null, null)
-      );
+      const testElement = <TestClass />;
+      TestUtils.renderIntoDocument(testElement);
 
       expect(warnings).to.be.an('array');
       expect(warnings.length).to.equal(1);
@@ -170,7 +158,7 @@ describe('ProptypeTests', () => {
 
   describe('Missing optional string', () => {
 
-    before(() => {
+    beforeEach(() => {
 
       TestClass = React.createClass({
         propTypes : {
@@ -185,9 +173,30 @@ describe('ProptypeTests', () => {
 
     it('should have no warnings for the optional moment string', (done) => {
 
-      shallowRenderer.render(
-        React.createElement(TestClass, null, null)
-      );
+      const testElement = <TestClass />;
+      TestUtils.renderIntoDocument(testElement);
+
+      expect(warnings).to.be.an('array');
+      expect(warnings.length).to.equal(0);
+      done();
+
+    });
+
+    it('should have no warnings for undefined input', (done) => {
+
+      const testElement = <TestClass testOptionalString={undefined} />;
+      TestUtils.renderIntoDocument(testElement);
+
+      expect(warnings).to.be.an('array');
+      expect(warnings.length).to.equal(0);
+      done();
+
+    });
+
+    it('should have no warnings for null input', (done) => {
+
+      const testElement = <TestClass testOptionalString={null} />;
+      TestUtils.renderIntoDocument(testElement);
 
       expect(warnings).to.be.an('array');
       expect(warnings.length).to.equal(0);
@@ -213,9 +222,10 @@ describe('ProptypeTests', () => {
 
     });
 
-    it('should have no warnings for the optional moment string', (done) => {
+    it('should have invalid prop for invalid moment string', (done) => {
 
-      shallowRenderer.render(<TestClass testWrongString={false} />);
+      const testElement = <TestClass testWrongString={'test'} />;
+      TestUtils.renderIntoDocument(testElement);
 
       expect(warnings).to.be.an('array');
       expect(warnings.length).to.equal(1);
@@ -244,9 +254,8 @@ describe('ProptypeTests', () => {
 
     it('should have no warnings for the optional moment string', (done) => {
 
-      shallowRenderer.render(
-        <TestClass testValidString={'12-12-2015'} testValidObject={moment()} />
-      );
+      const testElement = <TestClass testValidString={'12-12-2015'} testValidObject={moment()} />;
+      TestUtils.renderIntoDocument(testElement);
 
       expect(warnings).to.be.an('array');
       expect(warnings.length).to.equal(0);
