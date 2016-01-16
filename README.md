@@ -27,3 +27,10 @@ var TestClass = React.createClass({
            stringThing={'12-12-2014'} />
 
 ```
+
+# Tests
+
+Tests were approached with `jsdom` and React's test utility renderer
+
+- `npm test` for running unit tests
+- `npm run coverage` for current test coverage
