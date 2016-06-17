@@ -19,11 +19,13 @@ function createMomentChecker(type, typeValidator, validator) {
       var locationName = ReactPropTypeLocationNames[ location ];
       componentName = componentName || ANONYMOUS;
       propFullName = propFullName || propName;
-      return new Error(
-        'Required ' + locationName + ' `' + propFullName +
-        '` was not specified in `' +
-        componentName + '`.'
-      );
+      if (!props.hasOwnProperty(propName)) {
+        return new Error(
+          'Required ' + locationName + ' `' + propFullName +
+          '` was not specified in `' +
+          componentName + '`.'
+        );
+      }
     }
 
     var propValue = props[ propName ];

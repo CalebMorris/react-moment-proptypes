@@ -7,6 +7,10 @@ const warningRegex = /^Warning/;
 
 import MomentPropTypes from '../index';
 
+function constructWarningsMessage(warnings) {
+  return 'warnings: ' + JSON.stringify(warnings);
+}
+
 describe('ProptypeTests', () => {
 
   let oldConsole;
@@ -259,6 +263,35 @@ describe('ProptypeTests', () => {
 
       expect(warnings).to.be.an('array');
       expect(warnings.length).to.equal(0);
+      done();
+
+    });
+
+  });
+
+  describe('Correct Required Input', () => {
+
+    before(() => {
+
+      TestClass = React.createClass({
+        propTypes : {
+          testValidString : MomentPropTypes.momentString.isRequired,
+          testValidObject : MomentPropTypes.momentObj.isRequired,
+        },
+        render() {
+          return null;
+        },
+      });
+
+    });
+
+    it('should have no warnings for the optional moment string', (done) => {
+
+      const testElement = <TestClass testValidString={'12-12-2015'} testValidObject={moment()} />;
+      TestUtils.renderIntoDocument(testElement);
+
+      expect(warnings).to.be.an('array', constructWarningsMessage(warnings));
+      expect(warnings.length).to.equal(0, constructWarningsMessage(warnings));
       done();
 
     });
