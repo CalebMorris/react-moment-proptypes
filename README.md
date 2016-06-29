@@ -15,6 +15,7 @@ var TestClass = React.createClass({
   propTypes : {
     dateThing : momentPropTypes.momentObj,
     stringThing : momentPropTypes.momentString,
+    durationThing: momentPropTypes.momentDurationObj,
   },
 
   render : function() {
@@ -24,7 +25,8 @@ var TestClass = React.createClass({
 
 // Class Use
 <TestClass dateThing={moment()}
-           stringThing={'12-12-2014'} />
+           stringThing={'12-12-2014'}
+           durationThing={moment.duration(3, 'hours')}/>
 
 ```
 
