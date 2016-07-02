@@ -1,4 +1,6 @@
 var moment = require('moment');
+var momentValidationWrapper = require('./moment-validation-wrapper');
+
 moment.createFromInputFallback = function(config) {
   config._d = new Date(config._i);
 };
@@ -42,7 +44,7 @@ function createMomentChecker(type, typeValidator, validator, momentType) {
       );
     }
 
-    if (validator(propValue)) {
+    if (! validator(propValue)) {
       return new Error(
         'Invalid ' + location + ' `' + propName + '` of type `' + propType + '` ' +
         'supplied to `' + componentName + '`, expected `' + momentType + '`.'
@@ -67,8 +69,8 @@ module.exports = {
     function(obj) {
       return typeof obj === 'object';
     },
-    function(value) {
-      return typeof value === 'object' && !moment.isMoment(value);
+    function isValid(value) {
+      return momentValidationWrapper.isValidMoment(value);
     },
     'Moment'
   ),
@@ -78,8 +80,8 @@ module.exports = {
     function(str) {
       return typeof str === 'string';
     },
-    function isMomentString(value) {
-      return typeof value === 'string' && moment.utc(value).format() === 'Invalid date';
+    function isValid(value) {
+      return momentValidationWrapper.isValidMoment(moment.utc(value));
     },
     'Moment'
   ),
@@ -89,18 +91,10 @@ module.exports = {
     function(obj) {
       return typeof obj === 'object';
     },
-    function(value) {
-      // Since the moment library does not provide some way of identifying a duration object,
-      // we access a duration-only method and check for errors.
-      try {
-        value.asDays();
-      } catch (error) {
-        return true;
-      }
-
-      return false;
+    function isValid(value) {
+      return moment.isDuration(value);
     },
-    'duration'
+    'Duration'
   ),
 
 };

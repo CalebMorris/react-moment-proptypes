@@ -8,7 +8,14 @@ const warningRegex = /^Warning/;
 import MomentPropTypes from '../index';
 
 function constructWarningsMessage(warnings) {
-  return 'warnings: ' + JSON.stringify(warnings);
+  var message = '';
+  try {
+    message = 'warnings: ' + JSON.stringify(warnings);
+  } catch (err) {
+    console.log('Error creating test message', err.stack);
+  }
+
+  return message;
 }
 
 describe('ProptypeTests', () => {
@@ -127,7 +134,7 @@ describe('ProptypeTests', () => {
       expect(warnings.length).to.equal(2);
       expect(warnings[0]).to.include('Invalid input type');
       expect(warnings[1]).to.include('Invalid prop');
-      expect(warnings[1]).to.include('duration');
+      expect(warnings[1]).to.include('Duration');
       done();
 
     });
@@ -231,12 +238,12 @@ describe('ProptypeTests', () => {
 
     it('should have invalid prop for invalid moment string', (done) => {
 
-      const testElement = <TestClass testWrongString={'test'} />;
+      const testElement = <TestClass testWrongString={'-1'} />;
       TestUtils.renderIntoDocument(testElement);
 
-      expect(warnings).to.be.an('array');
-      expect(warnings.length).to.equal(1);
-      expect(warnings[0]).to.contain('Invalid prop');
+      expect(warnings).to.be.an('array', constructWarningsMessage(warnings));
+      expect(warnings.length).to.equal(1, constructWarningsMessage(warnings));
+      expect(warnings[0]).to.contain('Invalid prop', constructWarningsMessage(warnings));
       done();
 
     });
@@ -264,14 +271,14 @@ describe('ProptypeTests', () => {
       const testProps = {
         testValidString : '12-12-2015',
         testValidObject : moment(),
-        testValidDuration : moment.duration(),
+        testValidDuration : moment.duration(0),
       };
 
       const testElement = <TestClass {...testProps} />;
       TestUtils.renderIntoDocument(testElement);
 
-      expect(warnings).to.be.an('array');
-      expect(warnings.length).to.equal(0);
+      expect(warnings).to.be.an('array', constructWarningsMessage(warnings));
+      expect(warnings.length).to.equal(0, constructWarningsMessage(warnings));
       done();
 
     });
@@ -299,7 +306,7 @@ describe('ProptypeTests', () => {
       const testProps = {
         testValidString : '12-12-2015',
         testValidObject : moment(),
-        testValidDuration : moment.duration(),
+        testValidDuration : moment.duration(0),
       };
       const testElement = <TestClass {...testProps} />;
       TestUtils.renderIntoDocument(testElement);
