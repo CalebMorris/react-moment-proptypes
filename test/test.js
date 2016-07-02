@@ -5,7 +5,7 @@ import { expect } from 'chai';
 
 const warningRegex = /^Warning/;
 
-import MomentPropTypes from '../index';
+import MomentPropTypes from '../src/index';
 
 function constructWarningsMessage(warnings) {
   var message = '';
