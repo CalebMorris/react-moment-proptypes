@@ -89,7 +89,7 @@ describe('ProptypeTests', () => {
 
     });
 
-    it('should have no warnings for Missing optinal moment obj', (done) => {
+    it('should have no warnings for Missing optional moment obj', (done) => {
 
       const testElement = <TestClass/>;
       TestUtils.renderIntoDocument(testElement);
@@ -109,6 +109,7 @@ describe('ProptypeTests', () => {
       TestClass = React.createClass({
         propTypes : {
           testWrongObject : MomentPropTypes.momentObj,
+          testWrongDuration : MomentPropTypes.momentDurationObj,
         },
         render() {
           return null;
@@ -117,14 +118,16 @@ describe('ProptypeTests', () => {
 
     });
 
-    it('should have no warnings for optinal moment obj being wrong type', (done) => {
+    it('should have warnings for optional moment and duration objects being wrong type', (done) => {
 
-      const testElement = <TestClass testWrongObject={1} />;
+      const testElement = <TestClass testWrongObject={1} testWrongDuration={moment()}/>;
       TestUtils.renderIntoDocument(testElement);
 
       expect(warnings).to.be.an('array');
-      expect(warnings.length).to.equal(1);
-      expect(warnings[0]).to.contain('Invalid input type');
+      expect(warnings.length).to.equal(2);
+      expect(warnings[0]).to.include('Invalid input type');
+      expect(warnings[1]).to.include('Invalid prop');
+      expect(warnings[1]).to.include('duration');
       done();
 
     });
@@ -248,6 +251,7 @@ describe('ProptypeTests', () => {
         propTypes : {
           testValidString : MomentPropTypes.momentString,
           testValidObject : MomentPropTypes.momentObj,
+          testValidDuration : MomentPropTypes.momentDurationObj,
         },
         render() {
           return null;
@@ -257,8 +261,13 @@ describe('ProptypeTests', () => {
     });
 
     it('should have no warnings for the optional moment string', (done) => {
+      const testProps = {
+        testValidString : '12-12-2015',
+        testValidObject : moment(),
+        testValidDuration : moment.duration(),
+      };
 
-      const testElement = <TestClass testValidString={'12-12-2015'} testValidObject={moment()} />;
+      const testElement = <TestClass {...testProps} />;
       TestUtils.renderIntoDocument(testElement);
 
       expect(warnings).to.be.an('array');
@@ -277,6 +286,7 @@ describe('ProptypeTests', () => {
         propTypes : {
           testValidString : MomentPropTypes.momentString.isRequired,
           testValidObject : MomentPropTypes.momentObj.isRequired,
+          testValidDuration : MomentPropTypes.momentDurationObj.isRequired,
         },
         render() {
           return null;
@@ -286,8 +296,12 @@ describe('ProptypeTests', () => {
     });
 
     it('should have no warnings for the optional moment string', (done) => {
-
-      const testElement = <TestClass testValidString={'12-12-2015'} testValidObject={moment()} />;
+      const testProps = {
+        testValidString : '12-12-2015',
+        testValidObject : moment(),
+        testValidDuration : moment.duration(),
+      };
+      const testElement = <TestClass {...testProps} />;
       TestUtils.renderIntoDocument(testElement);
 
       expect(warnings).to.be.an('array', constructWarningsMessage(warnings));
