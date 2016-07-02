@@ -81,7 +81,7 @@ module.exports = {
       return typeof str === 'string';
     },
     function isValid(value) {
-      return momentValidationWrapper.isValidMoment(moment.utc(value));
+      return momentValidationWrapper.isValidMoment(moment(value));
     },
     'Moment'
   ),

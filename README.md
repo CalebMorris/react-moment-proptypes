@@ -36,3 +36,9 @@ Tests were approached with `jsdom` and React's test utility renderer
 
 - `npm test` for running unit tests
 - `npm run coverage` for current test coverage
+
+## Moment Versions
+
+- `npm run test-all` to test against tested moment version (1.6.0, 1.7.0, current)
+
+If there is a desire for varying moment legacy support I'm willing to add it, but will stick to YAGNI until then.

@@ -238,7 +238,7 @@ describe('ProptypeTests', () => {
 
     it('should have invalid prop for invalid moment string', (done) => {
 
-      const testElement = <TestClass testWrongString={'-1'} />;
+      const testElement = <TestClass testWrongString={'not a date'} />;
       TestUtils.renderIntoDocument(testElement);
 
       expect(warnings).to.be.an('array', constructWarningsMessage(warnings));
