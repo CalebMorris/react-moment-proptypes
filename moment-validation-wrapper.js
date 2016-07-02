@@ -6,7 +6,7 @@ function isValidMoment(testMoment) {
     return testMoment.isValid();
   }
 
-  return ! isNaN(testMoment.format());
+  return ! isNaN(testMoment);
 }
 
 module.exports = {
