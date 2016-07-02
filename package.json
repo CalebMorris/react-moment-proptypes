@@ -1,6 +1,6 @@
 {
   "name": "react-moment-proptypes",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "React proptype for moment module",
   "keywords": [
     "moment",
