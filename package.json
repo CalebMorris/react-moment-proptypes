@@ -29,7 +29,7 @@
     "email": "caleb.morris.g@gmail.com"
   },
   "license": "MIT",
-  "dependencies": {
+  "peerDependencies": {
     "moment": ">=1.6.0"
   },
   "devDependencies": {
