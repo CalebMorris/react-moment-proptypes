@@ -29,6 +29,9 @@
     "email": "caleb.morris.g@gmail.com"
   },
   "license": "MIT",
+  "dependencies": {
+    "moment": ">=1.6.0"
+  },
   "peerDependencies": {
     "moment": ">=1.6.0"
   },
