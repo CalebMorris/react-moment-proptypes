@@ -15,8 +15,15 @@ var ReactPropTypeLocationNames = {
 
 function createMomentChecker(type, typeValidator, validator, momentType) {
 
-  function propValidator(isRequired, props, propName, componentName, location, propFullName) {
-
+  function propValidator(
+    isRequired, // Bound parameter to indicate with the propType is required
+    predicate, // Bound parameter to allow user to add dynamic validation
+    props,
+    propName,
+    componentName,
+    location,
+    propFullName
+  ) {
     if (isRequired) {
       var locationName = ReactPropTypeLocationNames[ location ];
       componentName = componentName || ANONYMOUS;
@@ -51,12 +58,29 @@ function createMomentChecker(type, typeValidator, validator, momentType) {
       );
     }
 
+    if (predicate && ! predicate(propValue)) {
+      var predicateName = predicate.name || ANONYMOUS;
+      return new Error(
+        'Invalid ' + location + ' `' + propName + '` of type `' + propType + '` ' +
+        'supplied to `' + componentName + '`. Failed to succeed with predicate `' +
+        predicateName + '`.'
+      );
+    }
+
     return null;
 
   }
 
-  var requiredPropValidator = propValidator.bind(null, false);
-  requiredPropValidator.isRequired = propValidator.bind(null, true);
+  var requiredPropValidator = propValidator.bind(null, false, null);
+  requiredPropValidator.isRequired = propValidator.bind(null, true, null);
+  requiredPropValidator.withPredicate = function predicateApplication(predicate) {
+    if (typeof predicate !== 'function') {
+      throw new Error('`predicate` must be a function');
+    }
+    var basePropValidator = propValidator.bind(null, false, predicate);
+    basePropValidator.isRequired = propValidator.bind(null, true, predicate);
+    return basePropValidator;
+  };
 
   return requiredPropValidator;
 

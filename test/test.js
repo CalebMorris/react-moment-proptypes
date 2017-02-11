@@ -319,4 +319,164 @@ describe('ProptypeTests', () => {
 
   });
 
+  describe('Proptype Predicate', () => {
+
+    describe('momentObj invalid predicate', () => {
+
+      it('should throw', () => {
+
+        let propValidator;
+        expect(() => {
+          propValidator = MomentPropTypes.momentObj.withPredicate(null);
+        }).to.throw(Error);
+        expect(propValidator).to.be.undefined;
+
+      });
+
+    });
+
+    describe('momentObj named predicate', () => {
+
+      function isUTC(m) {
+        return false;
+      }
+
+      before(() => {
+
+        TestClass = React.createClass({
+          propTypes : {
+            testObjectNamedPredicate : MomentPropTypes.momentObj.withPredicate(isUTC),
+          },
+          render() {
+            return null;
+          },
+        });
+
+      });
+
+      it('should have warn failed predicate with name', (done) => {
+
+        const testProps = { testObjectNamedPredicate : moment() };
+        const testElement = <TestClass {...testProps} />;
+        TestUtils.renderIntoDocument(testElement);
+
+        expect(warnings).to.be.an('array', constructWarningsMessage(warnings));
+        expect(warnings.length).to.equal(1, constructWarningsMessage(warnings));
+        expect(warnings[0]).to.contain('Failed to succeed with predicate `' + isUTC.name + '`');
+        done();
+
+      });
+
+    });
+
+    describe('momentObj anonymous predicate', () => {
+
+      before(() => {
+
+        TestClass = React.createClass({
+          propTypes : {
+            testObjectAnonPredicate : MomentPropTypes.momentObj
+              .withPredicate(function() { return false; }),
+          },
+          render() {
+            return null;
+          },
+        });
+
+      });
+
+      it('should have warn failed predicate without name', (done) => {
+
+        const testProps = { testObjectAnonPredicate : moment() };
+        const testElement = <TestClass {...testProps} />;
+        TestUtils.renderIntoDocument(testElement);
+
+        expect(warnings).to.be.an('array', constructWarningsMessage(warnings));
+        expect(warnings.length).to.equal(1, constructWarningsMessage(warnings));
+        expect(warnings[0]).to.contain('Failed to succeed with predicate');
+        expect(warnings[0]).to.not.contain('isUTC');
+        done();
+
+      });
+
+    });
+
+    describe('momentObj required predicate', () => {
+
+      function isUTC(m) {
+        return false;
+      }
+
+      before(() => {
+
+        TestClass = React.createClass({
+          propTypes : {
+            testObjectRequiredPredicate : MomentPropTypes.momentObj
+              .withPredicate(isUTC).isRequired,
+          },
+          render() {
+            return null;
+          },
+        });
+
+      });
+
+      it('should have warn failed predicate with name', (done) => {
+
+        const testProps = { testObjectRequiredPredicate : moment() };
+        const testElement = <TestClass {...testProps} />;
+        TestUtils.renderIntoDocument(testElement);
+
+        expect(warnings).to.be.an('array', constructWarningsMessage(warnings));
+        expect(warnings.length).to.equal(1, constructWarningsMessage(warnings));
+        expect(warnings[0]).to.contain('Failed to succeed with predicate `' + isUTC.name + '`');
+        done();
+
+      });
+
+    });
+
+    describe('success predicate', () => {
+
+      function namedPredicate(m) {
+        return true;
+      }
+
+      before(() => {
+
+        TestClass = React.createClass({
+          propTypes : {
+            testObjectNamedPredicate : MomentPropTypes.momentObj.withPredicate(namedPredicate).isRequired,
+            testObjectAnonPredicate : MomentPropTypes.momentObj.withPredicate(() => true).isRequired,
+            testObjectRequiredNamedPredicate : MomentPropTypes.momentObj.withPredicate(namedPredicate).isRequired,
+            testObjectRequiredAnonPredicate : MomentPropTypes.momentObj.withPredicate(() => true).isRequired,
+          },
+          render() {
+            return null;
+          },
+        });
+
+      });
+
+      it('should have warn failed predicate with name', (done) => {
+
+        const testProps = {
+          testObjectNamedPredicate : moment(),
+          testObjectAnonPredicate : moment(),
+          testObjectRequiredNamedPredicate : moment(),
+          testObjectRequiredAnonPredicate : moment(),
+        };
+        const testElement = <TestClass {...testProps} />;
+        TestUtils.renderIntoDocument(testElement);
+
+        expect(warnings).to.be.an('array', constructWarningsMessage(warnings));
+        expect(warnings.length).to.equal(0, constructWarningsMessage(warnings));
+        done();
+
+      });
+
+    });
+
+  });
+
 });
