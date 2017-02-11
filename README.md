@@ -8,12 +8,17 @@ A React Proptype Validator to check if passed prop is a moment.js construct
 
 # Example
 
-``` javascript
+``` jsx
 var momentPropTypes = require('react-moment-proptypes');
 
 var TestClass = React.createClass({
   propTypes : {
     dateThing : momentPropTypes.momentObj,
+    dateThingWithPredicate : momentPropTypes.momentObj.withPredicate(
+      function isUTC(momentObject) {
+        return momentObject.isUTC();
+      }
+    ),
     stringThing : momentPropTypes.momentString,
     durationThing: momentPropTypes.momentDurationObj,
   },
@@ -25,6 +30,7 @@ var TestClass = React.createClass({
 
 // Class Use
 <TestClass dateThing={moment()}
+           dateThingWithPredicate={moment.utc()}
            stringThing={'12-12-2014'}
            durationThing={moment.duration(3, 'hours')}/>
 
