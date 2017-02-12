@@ -13,6 +13,44 @@ var ReactPropTypeLocationNames = {
   childContext : 'child context',
 };
 
+function validateProp(
+  typeValidator,
+  validator,
+  predicate, // Bound parameter to allow user to add dynamic validation
+  propName,
+  propValue,
+  propType,
+  momentType,
+  type,
+  componentName,
+  location
+) {
+  if (typeValidator && !typeValidator(propValue)) {
+    return new Error(
+      'Invalid input type: `' + propName + '` of type `' + propType + '` ' +
+      'supplied to `' + componentName + '`, expected `' + type + '`.'
+    );
+  }
+
+  if (! validator(propValue)) {
+    return new Error(
+      'Invalid ' + location + ' `' + propName + '` of type `' + propType + '` ' +
+      'supplied to `' + componentName + '`, expected `' + momentType + '`.'
+    );
+  }
+
+  if (predicate && ! predicate(propValue)) {
+    var predicateName = predicate.name || ANONYMOUS;
+    return new Error(
+      'Invalid ' + location + ' `' + propName + '` of type `' + propType + '` ' +
+      'supplied to `' + componentName + '`. Failed to succeed with predicate `' +
+      predicateName + '`.'
+    );
+  }
+
+  return null;
+}
+
 function createMomentChecker(type, typeValidator, validator, momentType) {
 
   function propValidator(
@@ -44,30 +82,18 @@ function createMomentChecker(type, typeValidator, validator, momentType) {
       return null;
     }
 
-    if (typeValidator && !typeValidator(propValue)) {
-      return new Error(
-        'Invalid input type: `' + propName + '` of type `' + propType + '` ' +
-        'supplied to `' + componentName + '`, expected `' + type + '`.'
-      );
-    }
-
-    if (! validator(propValue)) {
-      return new Error(
-        'Invalid ' + location + ' `' + propName + '` of type `' + propType + '` ' +
-        'supplied to `' + componentName + '`, expected `' + momentType + '`.'
-      );
-    }
-
-    if (predicate && ! predicate(propValue)) {
-      var predicateName = predicate.name || ANONYMOUS;
-      return new Error(
-        'Invalid ' + location + ' `' + propName + '` of type `' + propType + '` ' +
-        'supplied to `' + componentName + '`. Failed to succeed with predicate `' +
-        predicateName + '`.'
-      );
-    }
-
-    return null;
+    return validateProp(
+      typeValidator,
+      validator,
+      predicate, // Bound parameter to allow user to add dynamic validation
+      propName,
+      propValue,
+      propType,
+      momentType,
+      type,
+      componentName,
+      location
+    );
 
   }
 
