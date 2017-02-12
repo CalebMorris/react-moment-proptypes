@@ -1,62 +1,49 @@
 import React from 'react';
-import TestUtils from 'react-addons-test-utils';
 import moment from 'moment';
+import sinon from 'sinon';
 import { expect } from 'chai';
+import {
+  constructWarningsMessage,
+  createComponentSnapshot,
+} from './util';
 
 const warningRegex = /^Warning/;
 
 import MomentPropTypes from '../src/index';
 
-function constructWarningsMessage(warnings) {
-  var message = '';
-  try {
-    message = 'warnings: ' + JSON.stringify(warnings);
-  } catch (err) {
-    console.log('Error creating test message', err.stack);
-  }
-
-  return message;
-}
-
 describe('ProptypeTests', () => {
 
-  let oldConsole;
   let warnings = [];
-  let TestClass;
+  let consoleErrorStub;
 
-  before(() => {
+  beforeEach(() => {
 
-    oldConsole = console.error;
-
-    console.error = function() {
+    consoleErrorStub = sinon.stub(console, 'error', function recordWarnings() {
       for (let i = 0; i < arguments.length; i++) {
         const arg = arguments[ i ];
         if (warningRegex.test(arg)) {
           warnings.push(arg);
         }
       }
-    };
+    });
 
   });
 
   afterEach(() => {
 
     warnings = [];
-    TestClass = null;
 
-  });
-
-  after(() => {
-
-    console.error = oldConsole;
+    if (consoleErrorStub) {
+      consoleErrorStub.restore();
+    }
 
   });
 
   describe('Missing required object', () => {
 
-    before(() => {
+    it('should have a warning for the missing moment obj', (done) => {
 
-      TestClass = React.createClass({
+      const TestClass = React.createClass({
         propTypes : {
           testRequiredObject : MomentPropTypes.momentObj.isRequired,
         },
@@ -64,14 +51,9 @@ describe('ProptypeTests', () => {
           return null;
         },
       });
+      const snapshot = createComponentSnapshot(TestClass);
 
-    });
-
-    it('should have a warning for the missing moment obj', (done) => {
-
-      const testElement = <TestClass/>;
-      TestUtils.renderIntoDocument(testElement);
-
+      expect(snapshot).to.be.null;
       expect(warnings).to.be.an('array');
       expect(warnings.length).to.equal(1);
       expect(warnings[0]).to.contain('Required prop');
@@ -83,9 +65,9 @@ describe('ProptypeTests', () => {
 
   describe('Missing optional object', () => {
 
-    before(() => {
+    it('should have no warnings for Missing optional moment obj', (done) => {
 
-      TestClass = React.createClass({
+      const TestClass = React.createClass({
         propTypes : {
           testOptionalObject : MomentPropTypes.momentObj,
         },
@@ -93,14 +75,9 @@ describe('ProptypeTests', () => {
           return null;
         },
       });
+      const snapshot = createComponentSnapshot(TestClass);
 
-    });
-
-    it('should have no warnings for Missing optional moment obj', (done) => {
-
-      const testElement = <TestClass/>;
-      TestUtils.renderIntoDocument(testElement);
-
+      expect(snapshot).to.be.null;
       expect(warnings).to.be.an('array');
       expect(warnings.length).to.equal(0);
       done();
@@ -111,9 +88,9 @@ describe('ProptypeTests', () => {
 
   describe('Wrong type optional object', () => {
 
-    before(() => {
+    it('should have warnings for optional moment and duration objects being wrong type', (done) => {
 
-      TestClass = React.createClass({
+      const TestClass = React.createClass({
         propTypes : {
           testWrongObject : MomentPropTypes.momentObj,
           testWrongDuration : MomentPropTypes.momentDurationObj,
@@ -122,14 +99,13 @@ describe('ProptypeTests', () => {
           return null;
         },
       });
+      const testProps = {
+        testWrongObject: 1,
+        testWrongDuration: moment(),
+      };
+      const snapshot = createComponentSnapshot(TestClass, testProps);
 
-    });
-
-    it('should have warnings for optional moment and duration objects being wrong type', (done) => {
-
-      const testElement = <TestClass testWrongObject={1} testWrongDuration={moment()}/>;
-      TestUtils.renderIntoDocument(testElement);
-
+      expect(snapshot).to.be.null;
       expect(warnings).to.be.an('array');
       expect(warnings.length).to.equal(2);
       expect(warnings[0]).to.include('Invalid input type');
@@ -143,9 +119,9 @@ describe('ProptypeTests', () => {
 
   describe('Missing required string', () => {
 
-    before(() => {
+    it('should have a warning for the missing moment string', (done) => {
 
-      TestClass = React.createClass({
+      const TestClass = React.createClass({
         propTypes : {
           testRequiredString : MomentPropTypes.momentString.isRequired,
         },
@@ -153,14 +129,9 @@ describe('ProptypeTests', () => {
           return null;
         },
       });
+      const snapshot = createComponentSnapshot(TestClass);
 
-    });
-
-    it('should have a warning for the missing moment string', (done) => {
-
-      const testElement = <TestClass />;
-      TestUtils.renderIntoDocument(testElement);
-
+      expect(snapshot).to.be.null;
       expect(warnings).to.be.an('array');
       expect(warnings.length).to.equal(1);
       expect(warnings[0]).to.contain('Required prop');
@@ -171,6 +142,8 @@ describe('ProptypeTests', () => {
   });
 
   describe('Missing optional string', () => {
+
+    let TestClass;
 
     beforeEach(() => {
 
@@ -187,9 +160,9 @@ describe('ProptypeTests', () => {
 
     it('should have no warnings for the optional moment string', (done) => {
 
-      const testElement = <TestClass />;
-      TestUtils.renderIntoDocument(testElement);
+      const snapshot = createComponentSnapshot(TestClass);
 
+      expect(snapshot).to.be.null;
       expect(warnings).to.be.an('array');
       expect(warnings.length).to.equal(0);
       done();
@@ -198,9 +171,10 @@ describe('ProptypeTests', () => {
 
     it('should have no warnings for undefined input', (done) => {
 
-      const testElement = <TestClass testOptionalString={undefined} />;
-      TestUtils.renderIntoDocument(testElement);
+      const testProps = { testOptionalString : undefined };
+      const snapshot = createComponentSnapshot(TestClass, testProps);
 
+      expect(snapshot).to.be.null;
       expect(warnings).to.be.an('array');
       expect(warnings.length).to.equal(0);
       done();
@@ -209,9 +183,10 @@ describe('ProptypeTests', () => {
 
     it('should have no warnings for null input', (done) => {
 
-      const testElement = <TestClass testOptionalString={null} />;
-      TestUtils.renderIntoDocument(testElement);
+      const testProps = { testOptionalString : null };
+      const snapshot = createComponentSnapshot(TestClass, testProps);
 
+      expect(snapshot).to.be.null;
       expect(warnings).to.be.an('array');
       expect(warnings.length).to.equal(0);
       done();
@@ -223,9 +198,9 @@ describe('ProptypeTests', () => {
 
   describe('Invalid moment string/raw', () => {
 
-    before(() => {
+    it('should have invalid prop for invalid moment string', (done) => {
 
-      TestClass = React.createClass({
+      const TestClass = React.createClass({
         propTypes : {
           testWrongString : MomentPropTypes.momentString,
         },
@@ -233,14 +208,10 @@ describe('ProptypeTests', () => {
           return null;
         },
       });
+      const testProps = { testWrongString : 'not a date' };
+      const snapshot = createComponentSnapshot(TestClass, testProps);
 
-    });
-
-    it('should have invalid prop for invalid moment string', (done) => {
-
-      const testElement = <TestClass testWrongString={'not a date'} />;
-      TestUtils.renderIntoDocument(testElement);
-
+      expect(snapshot).to.be.null;
       expect(warnings).to.be.an('array', constructWarningsMessage(warnings));
       expect(warnings.length).to.equal(1, constructWarningsMessage(warnings));
       expect(warnings[0]).to.contain('Invalid prop', constructWarningsMessage(warnings));
@@ -252,9 +223,9 @@ describe('ProptypeTests', () => {
 
   describe('Correct Optional Input', () => {
 
-    before(() => {
+    it('should have no warnings for the optional moment string', (done) => {
 
-      TestClass = React.createClass({
+      const TestClass = React.createClass({
         propTypes : {
           testValidString : MomentPropTypes.momentString,
           testValidObject : MomentPropTypes.momentObj,
@@ -264,19 +235,14 @@ describe('ProptypeTests', () => {
           return null;
         },
       });
-
-    });
-
-    it('should have no warnings for the optional moment string', (done) => {
       const testProps = {
         testValidString : '12-12-2015',
         testValidObject : moment(),
         testValidDuration : moment.duration(0),
       };
+      const snapshot = createComponentSnapshot(TestClass, testProps);
 
-      const testElement = <TestClass {...testProps} />;
-      TestUtils.renderIntoDocument(testElement);
-
+      expect(snapshot).to.be.null;
       expect(warnings).to.be.an('array', constructWarningsMessage(warnings));
       expect(warnings.length).to.equal(0, constructWarningsMessage(warnings));
       done();
@@ -287,9 +253,9 @@ describe('ProptypeTests', () => {
 
   describe('Correct Required Input', () => {
 
-    before(() => {
+    it('should have no warnings for the optional moment string', (done) => {
 
-      TestClass = React.createClass({
+      const TestClass = React.createClass({
         propTypes : {
           testValidString : MomentPropTypes.momentString.isRequired,
           testValidObject : MomentPropTypes.momentObj.isRequired,
@@ -299,18 +265,14 @@ describe('ProptypeTests', () => {
           return null;
         },
       });
-
-    });
-
-    it('should have no warnings for the optional moment string', (done) => {
       const testProps = {
         testValidString : '12-12-2015',
         testValidObject : moment(),
         testValidDuration : moment.duration(0),
       };
-      const testElement = <TestClass {...testProps} />;
-      TestUtils.renderIntoDocument(testElement);
+      const snapshot = createComponentSnapshot(TestClass, testProps);
 
+      expect(snapshot).to.be.null;
       expect(warnings).to.be.an('array', constructWarningsMessage(warnings));
       expect(warnings.length).to.equal(0, constructWarningsMessage(warnings));
       done();
@@ -321,159 +283,123 @@ describe('ProptypeTests', () => {
 
   describe('Proptype Predicate', () => {
 
-    describe('momentObj invalid predicate', () => {
+    it('should throw for momentObj invalid predicate', () => {
 
-      it('should throw', () => {
-
-        let propValidator;
-        expect(() => {
-          propValidator = MomentPropTypes.momentObj.withPredicate(null);
-        }).to.throw(Error);
-        expect(propValidator).to.be.undefined;
-
-      });
+      let propValidator;
+      expect(() => {
+        propValidator = MomentPropTypes.momentObj.withPredicate(null);
+      }).to.throw(Error);
+      expect(propValidator).to.be.undefined;
 
     });
 
-    describe('momentObj named predicate', () => {
+    it('should have warning for momentObj named predicate', (done) => {
+      function isUTC(m) {
+        return false;
+      }
+
+      const TestClass = React.createClass({
+        propTypes : {
+          testObjectNamedPredicate : MomentPropTypes.momentObj.withPredicate(isUTC),
+        },
+        render() {
+          return null;
+        },
+      });
+      const testProps = { testObjectNamedPredicate : moment() };
+      const snapshot = createComponentSnapshot(TestClass, testProps);
+
+      expect(snapshot).to.be.null;
+      expect(warnings).to.be.an('array', constructWarningsMessage(warnings));
+      expect(warnings.length).to.equal(1, constructWarningsMessage(warnings));
+      expect(warnings[0]).to.contain('Failed to succeed with predicate `' + isUTC.name + '`');
+      done();
+
+    });
+
+    it('should have warning for momentObj anonymous predicate', (done) => {
+
+      const TestClass = React.createClass({
+        propTypes : {
+          testObjectAnonPredicate : MomentPropTypes.momentObj
+            .withPredicate(
+              function() {
+                return false;
+              }
+            ),
+        },
+        render() {
+          return null;
+        },
+      });
+      const testProps = { testObjectAnonPredicate : moment() };
+      const snapshot = createComponentSnapshot(TestClass, testProps);
+
+      expect(snapshot).to.be.null;
+      expect(warnings).to.be.an('array', constructWarningsMessage(warnings));
+      expect(warnings.length).to.equal(1, constructWarningsMessage(warnings));
+      expect(warnings[0]).to.contain('Failed to succeed with predicate');
+      expect(warnings[0]).to.not.contain('isUTC');
+      done();
+
+    });
+
+    it('should have warning for momentObj required predicate', (done) => {
 
       function isUTC(m) {
         return false;
       }
 
-      before(() => {
-
-        TestClass = React.createClass({
-          propTypes : {
-            testObjectNamedPredicate : MomentPropTypes.momentObj.withPredicate(isUTC),
-          },
-          render() {
-            return null;
-          },
-        });
-
+      const TestClass = React.createClass({
+        propTypes : {
+          testObjectRequiredPredicate : MomentPropTypes.momentObj
+            .withPredicate(isUTC).isRequired,
+        },
+        render() {
+          return null;
+        },
       });
 
-      it('should have warn failed predicate with name', (done) => {
+      const testProps = { testObjectRequiredPredicate : moment() };
+      const snapshot = createComponentSnapshot(TestClass, testProps);
 
-        const testProps = { testObjectNamedPredicate : moment() };
-        const testElement = <TestClass {...testProps} />;
-        TestUtils.renderIntoDocument(testElement);
-
-        expect(warnings).to.be.an('array', constructWarningsMessage(warnings));
-        expect(warnings.length).to.equal(1, constructWarningsMessage(warnings));
-        expect(warnings[0]).to.contain('Failed to succeed with predicate `' + isUTC.name + '`');
-        done();
-
-      });
+      expect(snapshot).to.be.null;
+      expect(warnings).to.be.an('array', constructWarningsMessage(warnings));
+      expect(warnings.length).to.equal(1, constructWarningsMessage(warnings));
+      expect(warnings[0]).to.contain('Failed to succeed with predicate `' + isUTC.name + '`');
+      done();
 
     });
 
-    describe('momentObj anonymous predicate', () => {
-
-      before(() => {
-
-        TestClass = React.createClass({
-          propTypes : {
-            testObjectAnonPredicate : MomentPropTypes.momentObj
-              .withPredicate(function() { return false; }),
-          },
-          render() {
-            return null;
-          },
-        });
-
-      });
-
-      it('should have warn failed predicate without name', (done) => {
-
-        const testProps = { testObjectAnonPredicate : moment() };
-        const testElement = <TestClass {...testProps} />;
-        TestUtils.renderIntoDocument(testElement);
-
-        expect(warnings).to.be.an('array', constructWarningsMessage(warnings));
-        expect(warnings.length).to.equal(1, constructWarningsMessage(warnings));
-        expect(warnings[0]).to.contain('Failed to succeed with predicate');
-        expect(warnings[0]).to.not.contain('isUTC');
-        done();
-
-      });
-
-    });
-
-    describe('momentObj required predicate', () => {
-
-      function isUTC(m) {
-        return false;
-      }
-
-      before(() => {
-
-        TestClass = React.createClass({
-          propTypes : {
-            testObjectRequiredPredicate : MomentPropTypes.momentObj
-              .withPredicate(isUTC).isRequired,
-          },
-          render() {
-            return null;
-          },
-        });
-
-      });
-
-      it('should have warn failed predicate with name', (done) => {
-
-        const testProps = { testObjectRequiredPredicate : moment() };
-        const testElement = <TestClass {...testProps} />;
-        TestUtils.renderIntoDocument(testElement);
-
-        expect(warnings).to.be.an('array', constructWarningsMessage(warnings));
-        expect(warnings.length).to.equal(1, constructWarningsMessage(warnings));
-        expect(warnings[0]).to.contain('Failed to succeed with predicate `' + isUTC.name + '`');
-        done();
-
-      });
-
-    });
-
-    describe('success predicate', () => {
+    it('should succeed with each momentObj variation', (done) => {
 
       function namedPredicate(m) {
         return true;
       }
 
-      before(() => {
-
-        TestClass = React.createClass({
-          propTypes : {
-            testObjectNamedPredicate : MomentPropTypes.momentObj.withPredicate(namedPredicate).isRequired,
-            testObjectAnonPredicate : MomentPropTypes.momentObj.withPredicate(() => true).isRequired,
-            testObjectRequiredNamedPredicate : MomentPropTypes.momentObj.withPredicate(namedPredicate).isRequired,
-            testObjectRequiredAnonPredicate : MomentPropTypes.momentObj.withPredicate(() => true).isRequired,
-          },
-          render() {
-            return null;
-          },
-        });
-
+      const TestClass = React.createClass({
+        propTypes : {
+          testObjectNamedPredicate : MomentPropTypes.momentObj.withPredicate(namedPredicate).isRequired,
+          testObjectAnonPredicate : MomentPropTypes.momentObj.withPredicate(() => true).isRequired,
+          testObjectRequiredNamedPredicate : MomentPropTypes.momentObj.withPredicate(namedPredicate).isRequired,
+          testObjectRequiredAnonPredicate : MomentPropTypes.momentObj.withPredicate(() => true).isRequired,
+        },
+        render() {
+          return null;
+        },
       });
+      const testProps = {
+        testObjectNamedPredicate : moment(),
+        testObjectAnonPredicate : moment(),
+        testObjectRequiredNamedPredicate : moment(),
+        testObjectRequiredAnonPredicate : moment(),
+      };
+      const snapshot = createComponentSnapshot(TestClass, testProps);
 
-      it('should have warn failed predicate with name', (done) => {
-
-        const testProps = {
-          testObjectNamedPredicate : moment(),
-          testObjectAnonPredicate : moment(),
-          testObjectRequiredNamedPredicate : moment(),
-          testObjectRequiredAnonPredicate : moment(),
-        };
-        const testElement = <TestClass {...testProps} />;
-        TestUtils.renderIntoDocument(testElement);
-
-        expect(warnings).to.be.an('array', constructWarningsMessage(warnings));
-        expect(warnings.length).to.equal(0, constructWarningsMessage(warnings));
-        done();
-
-      });
+      expect(snapshot).to.be.null;
+      expect(warnings).to.be.an('array', constructWarningsMessage(warnings));
+      expect(warnings.length).to.equal(0, constructWarningsMessage(warnings));
+      done();
 
     });
 

@@ -2,11 +2,24 @@
   "env": {
     "mocha": true
   },
+  "ecmaFeatures": {
+    "jsx": true
+  },
   "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
+  },
+  "plugins": [
+    "react"
+  ],
   "rules": {
     "no-unused-expressions": [ 0 ],
     "no-console": [ 0 ],
     "max-statements": [ 0 ],
     "no-undefined": [ 0 ],
+    "max-nested-callbacks": [ "warn", 5 ], // Shouldn't really matter in tests
+
+    "react/jsx-uses-vars": [ 2 ]
   }
 }
