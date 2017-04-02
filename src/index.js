@@ -13,6 +13,12 @@ var ReactPropTypeLocationNames = {
   childContext : 'child context',
 };
 
+function createInvalidRequiredErrorMessage(propName, componentName, value) {
+  return new Error(
+    'The prop `' + propName + '` is marked as required in `' + componentName + '`, but its value is `' + value + '`.'
+  );
+}
+
 function createMomentChecker(type, typeValidator, validator, momentType) {
 
   function propValidator(
@@ -24,23 +30,23 @@ function createMomentChecker(type, typeValidator, validator, momentType) {
     location,
     propFullName
   ) {
-    if (isRequired) {
-      var locationName = ReactPropTypeLocationNames[ location ];
-      componentName = componentName || ANONYMOUS;
-      propFullName = propFullName || propName;
-      if (!props.hasOwnProperty(propName)) {
-        return new Error(
-          'Required ' + locationName + ' `' + propFullName +
-          '` was not specified in `' +
-          componentName + '`.'
-        );
-      }
-    }
-
     var propValue = props[ propName ];
     var propType = typeof propValue;
 
-    if (typeof propValue === 'undefined' || propValue === null) {
+    var isPropValueUndefined = typeof propValue === 'undefined';
+    var isPropValueNull = propValue === null;
+
+    if (isRequired) {
+      componentName = componentName || ANONYMOUS;
+      propFullName = propFullName || propName;
+      if (isPropValueUndefined) {
+        return createInvalidRequiredErrorMessage(propFullName, componentName, 'undefined');
+      } else if (isPropValueNull) {
+        return createInvalidRequiredErrorMessage(propFullName, componentName, 'null');
+      }
+    }
+
+    if (isPropValueUndefined || isPropValueNull) {
       return null;
     }
 
