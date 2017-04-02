@@ -74,12 +74,71 @@ describe('ProptypeTests', () => {
 
       expect(warnings).to.be.an('array');
       expect(warnings.length).to.equal(1);
-      expect(warnings[0]).to.contain('Required prop');
+      expect(warnings[0]).to.contain('required');
       done();
 
     });
 
   });
+
+  describe('null required object', () => {
+
+    before(() => {
+
+      TestClass = React.createClass({
+        propTypes : {
+          testRequiredObject : MomentPropTypes.momentObj.isRequired,
+        },
+        render() {
+          return null;
+        },
+      });
+
+    });
+
+    it('should have a warning for the null moment obj', (done) => {
+
+      const testElement = <TestClass testRequiredObject={null}/>;
+      TestUtils.renderIntoDocument(testElement);
+
+      expect(warnings).to.be.an('array');
+      expect(warnings.length).to.equal(1);
+      expect(warnings[0]).to.contain('required');
+      expect(warnings[0]).to.contain('null');
+      done();
+
+    });
+
+  });
+
+  // describe('undefined required object', () => {
+  //
+  //   before(() => {
+  //
+  //     TestClass = React.createClass({
+  //       propTypes : {
+  //         testRequiredObject : MomentPropTypes.momentObj.isRequired,
+  //       },
+  //       render() {
+  //         return null;
+  //       },
+  //     });
+  //
+  //   });
+  //
+  //   it('should have a warning for the undefined moment obj', (done) => {
+  //     const testElement = <TestClass testRequiredObject={undefined}/>;
+  //     TestUtils.renderIntoDocument(testElement);
+  //
+  //     expect(warnings).to.be.an('array');
+  //     expect(warnings.length).to.equal(1);
+  //     expect(warnings[0]).to.contain('required');
+  //     expect(warnings[0]).to.contain('undefined');
+  //     done();
+  //
+  //   });
+  //
+  // });
 
   describe('Missing optional object', () => {
 
@@ -163,12 +222,72 @@ describe('ProptypeTests', () => {
 
       expect(warnings).to.be.an('array');
       expect(warnings.length).to.equal(1);
-      expect(warnings[0]).to.contain('Required prop');
+      expect(warnings[0]).to.contain('required');
       done();
 
     });
 
   });
+
+  describe('null required string', () => {
+
+    before(() => {
+
+      TestClass = React.createClass({
+        propTypes : {
+          testRequiredString : MomentPropTypes.momentString.isRequired,
+        },
+        render() {
+          return null;
+        },
+      });
+
+    });
+
+    it('should have a warning for the null moment string', (done) => {
+
+      const testElement = <TestClass testRequiredString={null}/>;
+      TestUtils.renderIntoDocument(testElement);
+
+      expect(warnings).to.be.an('array');
+      expect(warnings.length).to.equal(1);
+      expect(warnings[0]).to.contain('required');
+      expect(warnings[0]).to.contain('null');
+      done();
+
+    });
+
+  });
+
+  // describe('undefined required string', () => {
+  //
+  //   before(() => {
+  //
+  //     TestClass = React.createClass({
+  //       propTypes : {
+  //         testRequiredString : MomentPropTypes.momentString.isRequired,
+  //       },
+  //       render() {
+  //         return null;
+  //       },
+  //     });
+  //
+  //   });
+  //
+  //   it('should have a warning for the undefined moment string', (done) => {
+  //
+  //     const testElement = <TestClass testRequiredString={undefined}/>;
+  //     TestUtils.renderIntoDocument(testElement);
+  //
+  //     expect(warnings).to.be.an('array');
+  //     expect(warnings.length).to.equal(1);
+  //     expect(warnings[0]).to.contain('required');
+  //     expect(warnings[0]).to.contain('undefined');
+  //     done();
+  //
+  //   });
+  //
+  // });
 
   describe('Missing optional string', () => {
 
