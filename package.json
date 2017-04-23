@@ -44,7 +44,8 @@
     "istanbul": "^0.3.13",
     "jsdom": "^6.5.1",
     "mocha": "^2.2.1",
-    "react": "^0.14.6",
-    "react-addons-test-utils": "^0.14.6"
+    "react": "^15.4.2",
+    "react-addons-test-utils": "^15.4.2",
+    "react-dom": "^15.4.2"
   }
 }
