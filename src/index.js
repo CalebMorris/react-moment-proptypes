@@ -1,21 +1,15 @@
 var moment = require('moment');
 var momentValidationWrapper = require('./moment-validation-wrapper');
+var messages = require('./messages');
 
 moment.createFromInputFallback = function(config) {
   config._d = new Date(config._i);
 };
 
-var ANONYMOUS = '<<anonymous>>';
-
-var ReactPropTypeLocationNames = {
-  prop : 'prop',
-  context : 'context',
-  childContext : 'child context',
-};
-
 function createInvalidRequiredErrorMessage(propName, componentName, value) {
   return new Error(
-    'The prop `' + propName + '` is marked as required in `' + componentName + '`, but its value is `' + value + '`.'
+    'The prop `' + propName + '` ' + messages.requiredCore +
+    ' in `' + componentName + '`, but its value is `' + value + '`.'
   );
 }
 
@@ -37,7 +31,7 @@ function createMomentChecker(type, typeValidator, validator, momentType) {
     var isPropValueNull = propValue === null;
 
     if (isRequired) {
-      componentName = componentName || ANONYMOUS;
+      componentName = componentName ||  messages.anonymousMessage;
       propFullName = propFullName || propName;
       if (isPropValueUndefined) {
         return createInvalidRequiredErrorMessage(propFullName, componentName, 'undefined');
@@ -52,7 +46,7 @@ function createMomentChecker(type, typeValidator, validator, momentType) {
 
     if (typeValidator && !typeValidator(propValue)) {
       return new Error(
-        'Invalid input type: `' + propName + '` of type `' + propType + '` ' +
+        messages.invalidTypeCore + ': `' + propName + '` of type `' + propType + '` ' +
         'supplied to `' + componentName + '`, expected `' + type + '`.'
       );
     }
@@ -65,10 +59,10 @@ function createMomentChecker(type, typeValidator, validator, momentType) {
     }
 
     if (predicate && ! predicate(propValue)) {
-      var predicateName = predicate.name || ANONYMOUS;
+      var predicateName = predicate.name || messages.anonymousMessage;
       return new Error(
         'Invalid ' + location + ' `' + propName + '` of type `' + propType + '` ' +
-        'supplied to `' + componentName + '`. Failed to succeed with predicate `' +
+        'supplied to `' + componentName + '`. ' + messages.predicateFailureCore + ' `' +
         predicateName + '`.'
       );
     }
