@@ -38,7 +38,7 @@ var TestClass = React.createClass({
 
 # Tests
 
-Tests were approached with `jsdom` and React's test utility renderer
+Tests were approached with `enzyme` and React's test utility renderer
 
 - `npm test` for running unit tests
 - `npm run coverage` for current test coverage
