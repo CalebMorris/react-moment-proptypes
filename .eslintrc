@@ -55,7 +55,7 @@
     // best practices
     "accessor-pairs": [ 2 ],
     "block-scoped-var": [ 2 ],
-    "complexity": [ 2, 7 ],
+    "complexity": [ 2, 10 ],
     "consistent-return": [ 2 ],
     "curly": [ 2, "all" ],
     "default-case": [ 2 ],
