@@ -15,6 +15,22 @@ function isValidMoment(testMoment) {
   return !isNaN(testMoment);
 }
 
+function isValidDuration(testDuration) {
+  if (typeof moment.isDuration === 'function' && !moment.isDuration(testDuration)) {
+    return false;
+  }
+
+  /* istanbul ignore else  */
+  if (typeof testDuration.isValid === 'function') {
+    // moment 2.1.1+
+    return testDuration.isValid();
+  }
+
+  /* istanbul ignore next */
+  return !isNaN(testDuration);
+}
+
 module.exports = {
-  isValidMoment : isValidMoment,
+  isValidMoment: isValidMoment,
+  isValidDuration: isValidDuration,
 };

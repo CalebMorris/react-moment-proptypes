@@ -21,6 +21,7 @@ var TestClass = React.createClass({
     ),
     stringThing : momentPropTypes.momentString,
     durationThing: momentPropTypes.momentDurationObj,
+    durationPrimitiveThing: momentPropTypes.durationPrimitive,
   },
 
   render : function() {
@@ -32,7 +33,8 @@ var TestClass = React.createClass({
 <TestClass dateThing={moment()}
            dateThingWithPredicate={moment.utc()}
            stringThing={'12-12-2014'}
-           durationThing={moment.duration(3, 'hours')}/>
+           durationThing={moment.duration(3, 'hours')}
+           durationPrimitiveThing={[12, 'years']} />
 
 ```
 
