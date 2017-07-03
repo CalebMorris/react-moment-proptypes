@@ -35,6 +35,27 @@ function createInvalidRequiredErrorMessage(propName, componentName, value) {
   );
 }
 
+var independentGuardianValue = -1;
+
+function preValidationRequireCheck(isRequired, componentName, propFullName, propValue) {
+  var isPropValueUndefined = typeof propValue === 'undefined';
+  var isPropValueNull = propValue === null;
+
+  if (isRequired) {
+    if (isPropValueUndefined) {
+      return createInvalidRequiredErrorMessage(propFullName, componentName, 'undefined');
+    } else if (isPropValueNull) {
+      return createInvalidRequiredErrorMessage(propFullName, componentName, 'null');
+    }
+  }
+
+  if (isPropValueUndefined || isPropValueNull) {
+    return null;
+  }
+
+  return independentGuardianValue;
+}
+
 function createMomentChecker(type, typeValidator, validator, momentType) {
 
   function propValidator(
@@ -49,21 +70,15 @@ function createMomentChecker(type, typeValidator, validator, momentType) {
     var propValue = props[ propName ];
     var propType = typeof propValue;
 
-    var isPropValueUndefined = typeof propValue === 'undefined';
-    var isPropValueNull = propValue === null;
+    componentName = componentName || messages.anonymousMessage;
+    propFullName = propFullName || propName;
 
-    if (isRequired) {
-      componentName = componentName ||  messages.anonymousMessage;
-      propFullName = propFullName || propName;
-      if (isPropValueUndefined) {
-        return createInvalidRequiredErrorMessage(propFullName, componentName, 'undefined');
-      } else if (isPropValueNull) {
-        return createInvalidRequiredErrorMessage(propFullName, componentName, 'null');
-      }
-    }
+    var preValidationRequireCheckValue = preValidationRequireCheck(
+      isRequired, componentName, propFullName, propValue
+    );
 
-    if (isPropValueUndefined || isPropValueNull) {
-      return null;
+    if (preValidationRequireCheckValue !== independentGuardianValue) {
+      return preValidationRequireCheckValue;
     }
 
     if (typeValidator && !typeValidator(propValue)) {
@@ -73,14 +88,14 @@ function createMomentChecker(type, typeValidator, validator, momentType) {
       );
     }
 
-    if (! validator(propValue)) {
+    if (!validator(propValue)) {
       return new Error(
         messages.baseInvalidMessage + location + ' `' + propName + '` of type `' + propType + '` ' +
         'supplied to `' + componentName + '`, expected `' + momentType + '`.'
       );
     }
 
-    if (predicate && ! predicate(propValue)) {
+    if (predicate && !predicate(propValue)) {
       var predicateName = predicate.name || messages.anonymousMessage;
       return new Error(
         messages.baseInvalidMessage + location + ' `' + propName + '` of type `' + propType + '` ' +
