@@ -17,9 +17,10 @@
     "clean": "rm -Rf ./coverage",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "test": "./node_modules/.bin/mocha --recursive --compilers js:babel/register",
-    "test-all": "npm run test-1.6 && npm run test-1.7 && rm -Rf ./node_modules/moment/ && npm i && npm test",
+    "test-all": "npm run test-1.6 && npm run test-1.7 && npm run test-latest",
     "test-1.6": "rm -Rf ./node_modules/moment/ && npm i moment@1.6.0 && npm test",
     "test-1.7": "rm -Rf ./node_modules/moment/ && npm i moment@1.7.0 && npm test",
+    "test-latest": "rm -Rf ./node_modules/moment/ && npm i moment@latest && npm test",
     "lint": "./node_modules/.bin/eslint --ext .js .",
     "lint-quiet": "./node_modules/.bin/eslint --ext .js --quiet .",
     "coverage": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha -- --reporter dot --recursive --compilers js:babel/register"
