@@ -40,7 +40,7 @@ var TestClass = React.createClass({
 
 Tests were approached with `enzyme` and React's test utility renderer
 
-- `npm test` for running unit tests
+- `npm test` for running unit and integration tests
 - `npm run coverage` for current test coverage
 
 ## Moment Versions
