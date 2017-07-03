@@ -6,7 +6,7 @@ import React from 'react';
 import moment from 'moment';
 import { setup, assertRenderSuccess, assertRenderFailure, TestUtilError } from './util';
 import { momentObj } from '../../src/index';
-import * as messages from '../../src/messages';
+import { messages } from '../../src/core';
 
 const successIdKey = '#success';
 class MomentObj extends React.Component {

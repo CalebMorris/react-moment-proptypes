@@ -5,7 +5,7 @@ import React from 'react';
 
 import { setup, assertRenderSuccess, assertRenderFailure } from './util';
 import { momentString } from '../../src/index';
-import * as messages from '../../src/messages';
+import { messages } from '../../src/core';
 
 const successIdKey = '#success';
 class MomentStr extends React.Component {
