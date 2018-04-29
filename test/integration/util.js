@@ -25,7 +25,7 @@ export function setup() {
 
   hasSetupComplete = true;
   before(() => {
-    sinon.stub(console, 'error', (warning) => {
+    sinon.stub(console, 'error').callsFake((warning) => {
       throw new TestUtilError(warning);
     });
   });
