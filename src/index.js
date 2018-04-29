@@ -2,10 +2,6 @@ var moment = require('moment');
 var momentValidationWrapper = require('./moment-validation-wrapper');
 var core = require('./core');
 
-moment.createFromInputFallback = function(config) {
-  config._d = new Date(config._i);
-};
-
 module.exports = {
 
   momentObj : core.createMomentChecker(
