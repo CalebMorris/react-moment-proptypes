@@ -36,6 +36,22 @@ var TestClass = React.createClass({
 
 ```
 
+# Moment Configuration
+
+## createFromInputFallback
+Moment provides a `moment.createFromInputFallback` method you can define to create additional parsing rules.
+
+With some versions of moment you may receive the following console warning:
+```
+Deprecation warning: value provided is not in a recognized RFC2822 or ISO format. moment construction falls back to js Date(), which is not reliable across all browsers and versions. Non RFC2822/ISO date formats are discouraged and will be removed in an upcoming major release. Please refer to http://momentjs.com/guides/#/warnings/js-date/ for more info.
+Arguments:
+[0] _isAMomentObject: true, _isUTC: false, _useUTC: false, _l: undefined, _i: not a date, _f: undefined, _strict: undefined, _locale: [object Object]
+Error
+    at [... stack trace]
+```
+Example implementations can be found at the [given documentation link](http://momentjs.com/guides/#/warnings/js-date/).
+
+
 # Tests
 
 Tests were approached with `enzyme` and React's test utility renderer
