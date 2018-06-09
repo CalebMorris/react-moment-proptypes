@@ -9,5 +9,7 @@ node_js:
 script:
     - npm run lint-quiet
     - npm test
+    - npm run coverage
+    - npm run coveralls
     - npm run test-1.6
     - npm run test-1.7
