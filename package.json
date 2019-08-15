@@ -23,7 +23,7 @@
     "test-latest": "rm -Rf ./node_modules/moment/ && npm i moment@latest && npm test",
     "lint": "./node_modules/.bin/eslint --ext .js . --ignore-path .gitignore",
     "lint-quiet": "./node_modules/.bin/eslint --ext .js --quiet . --ignore-path .gitignore",
-    "coverage": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha -- --reporter dot --recursive --compilers js:babel/register --require ./test/suppress-fallback-warning.js"
+    "coverage": "./node_modules/.bin/nyc npm run test"
   },
   "author": {
     "name": "Caleb Morris",
@@ -46,8 +46,8 @@
     "coveralls": "^2.11.6",
     "enzyme": "^2.9.1",
     "eslint": "^0.24.0",
-    "istanbul": "^0.3.13",
     "mocha": "^3.4.2",
+    "nyc": "^14.1.1",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-test-renderer": "^15.6.1",
