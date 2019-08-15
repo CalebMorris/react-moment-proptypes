@@ -29,6 +29,9 @@
     "email": "caleb.morris.g@gmail.com"
   },
   "license": "MIT",
+  "engine": {
+    "node": ">= 8.0"
+  },
   "dependencies": {
     "moment": ">=1.6.0"
   },
