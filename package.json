@@ -16,7 +16,7 @@
   "scripts": {
     "clean": "rm -Rf ./coverage",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
-    "test": "./node_modules/.bin/mocha --recursive --require @babel/register --require ./test/suppress-fallback-warning.js",
+    "test": "./node_modules/.bin/mocha --recursive --require @babel/register --require ./test/suppress-fallback-warning.js --require ./test/require-enzyme-adapter.js",
     "test-all": "npm run test-1.6 && npm run test-1.7 && npm run test-latest",
     "test-1.6": "rm -Rf ./node_modules/moment/ && npm i moment@1.6.0 && npm test",
     "test-1.7": "rm -Rf ./node_modules/moment/ && npm i moment@1.7.0 && npm test",
@@ -44,13 +44,14 @@
     "babel-eslint": "^4.1.6",
     "chai": "^4.2.0",
     "coveralls": "^3.0.6",
-    "enzyme": "^2.9.1",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.14.0",
     "eslint": "^0.24.0",
     "mocha": "^6.2.0",
     "nyc": "^14.1.1",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
-    "react-test-renderer": "^15.6.1",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-test-renderer": "^16.9.0",
     "sinon": "^7.4.1"
   }
 }
