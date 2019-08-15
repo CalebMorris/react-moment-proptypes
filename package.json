@@ -16,7 +16,7 @@
   "scripts": {
     "clean": "rm -Rf ./coverage",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
-    "test": "./node_modules/.bin/mocha --recursive --compilers js:babel/register --require ./test/suppress-fallback-warning.js",
+    "test": "./node_modules/.bin/mocha --recursive --require @babel/register --require ./test/suppress-fallback-warning.js",
     "test-all": "npm run test-1.6 && npm run test-1.7 && npm run test-latest",
     "test-1.6": "rm -Rf ./node_modules/moment/ && npm i moment@1.6.0 && npm test",
     "test-1.7": "rm -Rf ./node_modules/moment/ && npm i moment@1.7.0 && npm test",
@@ -37,7 +37,10 @@
     "moment": ">=1.6.0"
   },
   "devDependencies": {
-    "babel": "^5.6.23",
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/register": "^7.5.5",
     "babel-eslint": "^4.1.6",
     "chai": "^2.3.0",
     "coveralls": "^2.11.6",
