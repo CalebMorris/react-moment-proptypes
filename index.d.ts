@@ -16,7 +16,7 @@ export namespace ReactMomentProptypes {
    * A prop-type validator with can be extended with a validation predicate.
    */
   export interface Validator<T> extends PropTypes.Validator<T | undefined | null> {
-    withPredicate(isValidMoment): Validator<T>,
+    withPredicate(isValidMoment: ValidMomentPredicate): Validator<T>,
   }
 
   /**
@@ -32,6 +32,6 @@ export namespace ReactMomentProptypes {
    * @param moment The moment being validated
    * @returns true if the Moment is valid
    */
-  function isValidMoment(moment: moment.Moment): boolean;
+  type ValidMomentPredicate = (moment: moment.Moment) => boolean;
 
 }
