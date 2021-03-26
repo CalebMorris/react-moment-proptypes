@@ -3,9 +3,9 @@ import * as PropTypes from 'prop-types';
 
 declare module 'react-moment-proptypes';
 
-export const momentObj: ReactMomentProptypes.RequireableValidator<moment.Moment>;
-export const momentString: ReactMomentProptypes.RequireableValidator<string>;
-export const momentDurationObj: ReactMomentProptypes.RequireableValidator<moment.Duration>;
+export const momentObj: ReactMomentProptypes.Validator<moment.Moment>;
+export const momentString: ReactMomentProptypes.Validator<string>;
+export const momentDurationObj: ReactMomentProptypes.Validator<moment.Duration>;
 
 /**
  * Constructs specific to 'react-moment-proptypes' that are not top-level, but need to be exposed.
@@ -13,17 +13,18 @@ export const momentDurationObj: ReactMomentProptypes.RequireableValidator<moment
 export namespace ReactMomentProptypes {
 
   /**
-   * A prop-type validator with can be extended with a validation predicate.
+   * A prop-type that can be marked as required, have an evaluation predicate attached, or both.
    */
-  export interface Validator<T> extends PropTypes.Validator<T | undefined | null> {
-    withPredicate(isValidMoment: ValidMomentPredicate): Validator<T>,
+   export interface Validator<T> extends PropTypes.Validator<T | undefined | null> {
+    isRequired: PredicatableValidator<NonNullable<T>>;
+    withPredicate(isValidMoment: ValidMomentPredicate): PropTypes.Requireable<T>,
   }
 
   /**
-   * A prop-type validator that allows for forcing requirement of the corresponding prop.
+   * A prop-type validator that can have an evaluation predicate attached.
    */
-  export interface RequireableValidator<T> extends Validator<T> {
-    isRequired: Validator<NonNullable<T>>;
+  export interface PredicatableValidator<T> extends PropTypes.Validator<T | undefined | null> {
+    withPredicate(isValidMoment: ValidMomentPredicate): PropTypes.Validator<T>,
   }
 
   /**
