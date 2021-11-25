@@ -13,17 +13,18 @@ export const momentDurationObj: ReactMomentProptypes.RequireableValidator<moment
 export namespace ReactMomentProptypes {
 
   /**
-   * A prop-type validator with can be extended with a validation predicate.
+   * A prop-type validator which can be extended with a validation predicate.
    */
-  export interface Validator<T> extends PropTypes.Validator<T | undefined | null> {
-    withPredicate(isValidMoment: ValidMomentPredicate): Validator<T>,
+  export interface Validator<T> extends PropTypes.Validator<T> {
+    withPredicate(isValidMoment: ValidMomentPredicate): Validator<T>;
   }
 
   /**
    * A prop-type validator that allows for forcing requirement of the corresponding prop.
    */
-  export interface RequireableValidator<T> extends Validator<T> {
+  export interface RequireableValidator<T> extends Validator<T | undefined | null> {
     isRequired: Validator<NonNullable<T>>;
+    withPredicate(isValidMoment: ValidMomentPredicate): RequireableValidator<T>;
   }
 
   /**
